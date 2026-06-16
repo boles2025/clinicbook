@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد أونلاين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-light: #7dd3fc;
+            --accent: #2dd4bf;
+            --bg: #030712;
+            --surface: rgba(15, 23, 42, 0.8);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --shadow-glow: 0 0 25px rgba(14, 165, 233, 0.2);
+            --radius: 24px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(45, 212, 191, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .booking-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), var(--shadow-glow);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #fff;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+        }
+
+        .clinic-name {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .doctor-name {
+            font-size: 16px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .instruction-card {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px dashed rgba(14, 165, 233, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .form-label {
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            background-color: #0f172a !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 12px 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #1e293b !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.25) !important;
+        }
+
+        .form-control::placeholder {
+            color: #cbd5e1 !important;
+            opacity: 0.9 !important;
+        }
+
+        .form-select option {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+
+        .form-control:disabled, .form-select:disabled {
+            background-color: #1e293b !important;
+            color: #64748b !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            opacity: 0.7;
+        }
+
+        .btn-booking {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 800;
+            font-size: 16px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn-booking:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .disabled-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .disabled-message i {
+            font-size: 50px;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        /* Success Card Styling */
+        .success-card {
+            text-align: center;
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(45, 212, 191, 0.15);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            margin: 0 auto 20px;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(45, 212, 191, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+        }
+
+        .receipt-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 8px;
+        }
+
+        .receipt-row:last-child {
+            border: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .receipt-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .receipt-value {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .loading-screen {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .spinner-custom {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(14, 165, 233, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="booking-container">
+        <!-- Loading Screen -->
+        <div id="loadingView" class="loading-screen">
+            <div class="spinner-custom"></div>
+            <p class="text-muted">جاري تحميل بيانات العيادة...</p>
+        </div>
+
+        <!-- Booking Form View -->
+        <div id="formView" style="display:none">
+            <div class="header-section">
+                <div class="header-logo"><i class="fas fa-heartbeat"></i></div>
+                <h2 class="clinic-name" id="displayClinicName">اسم العيادة</h2>
+                <div class="doctor-name" id="displayDoctorName">اسم الدكتور</div>
+            </div>
+
+            <div class="instruction-card" id="bookingNoteContainer" style="display:none">
+                <div class="fw-bold mb-1 text-primary-light"><i class="fas fa-info-circle me-1"></i> تنويه من العيادة:</div>
+                <div id="displayBookingNote" style="color:#e2e8f0"></div>
+            </div>
+
+            <form id="bookingForm" onsubmit="handleFormSubmit(event)">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">اسم المريض ثلاثي</label>
+                        <input type="text" class="form-control" id="patientName" required placeholder="أدخل اسمك بالكامل">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input type="tel" class="form-control" id="patientPhone" required placeholder="مثال: 01xxxxxxxxx">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">العمر</label>
+                        <input type="number" class="form-control" id="patientAge" required placeholder="السن">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">النوع</label>
+                        <select class="form-select" id="patientGender" required>
+                            <option value="ذكر">ذكر</option>
+                            <option value="أنثى">أنثى</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">تاريخ الحجز</label>
+                        <input type="text" class="form-control" id="bookingDate" required placeholder="اختر تاريخ الكشف">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">ساعة وموعد الحجز</label>
+                        <select class="form-select" id="bookingSlot" required disabled>
+                            <option value="" selected disabled>اختر تاريخ الحجز أولاً</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">نوع الحجز والخدمة المطلوبة</label>
+                        <select class="form-select" id="bookingType" required>
+                            <option value="" selected disabled>جاري تحميل الخدمات والأسعار...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="submitError" class="text-danger mt-3 small" style="display:none; text-align:center; font-weight:700"></div>
+
+                <button type="submit" class="btn-booking" id="submitBtn">
+                    <i class="fas fa-calendar-check me-1"></i> تأكيد الحجز أونلاين
+                </button>
+            </form>
+        </div>
+
+        <!-- Booking Disabled View -->
+        <div id="disabledView" class="disabled-message" style="display:none">
+            <i class="fas fa-ban"></i>
+            <h3>الحجز الأونلاين مغلق</h3>
+            <p id="disabledBookingNote" class="text-muted mt-2">نعتذر لك، الحجز عبر الإنترنت غير متاح لهذه العيادة حالياً بقرار من الإدارة. يرجى التواصل هاتفياً.</p>
+        </div>
+
+        <!-- Success Receipt View -->
+        <div id="successView" class="success-card" style="display:none">
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h3 class="fw-bold" style="color:var(--accent)">تم تسجيل حجزك بنجاح!</h3>
+            <p class="text-muted small">تم تسجيل الموعد في جدول العيادة، يرجى حفظ بيانات الحجز التالية:</p>
+
+            <div class="receipt-box">
+                <div class="receipt-row">
+                    <span class="receipt-label">العيادة</span>
+                    <span class="receipt-value" id="recClinic"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">الطبيب</span>
+                    <span class="receipt-value" id="recDoctor"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">اسم المريض</span>
+                    <span class="receipt-value" id="recPatientName"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">تاريخ الحجز</span>
+                    <span class="receipt-value" id="recDate"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">ساعة الموعد</span>
+                    <span class="receipt-value" id="recSlot" style="color:var(--primary-light)"></span>
+                </div>
+            </div>
+
+            <div class="alert alert-warning py-2 text-start small mb-4" style="line-height:1.6; border-radius:12px; background:rgba(245, 158, 11, 0.1); border:1px solid rgba(245, 158, 11, 0.2); color:#f59e0b">
+                <strong>تنبيه هام:</strong> يرجى الالتزام بالموعد المحدد والحضور قبل الوقت بـ 15 دقيقة للتأكيد. في حال الرغبة في الإلغاء يرجى الاتصال هاتفياً بالعيادة.
+            </div>
+
+            <button type="button" class="btn-booking" onclick="location.reload()" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); box-shadow:none">
+                <i class="fas fa-redo me-1"></i> حجز موعد جديد
+            </button>
+        </div>
+    </div>
+
+    <!-- Script imports for Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase Configuration (Shared with the main app)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsKE0-wWf2D0dM40XPw7O2JzqvQX1RHns",
+            authDomain: "drclinic-bf5e0.firebaseapp.com",
+            projectId: "drclinic-bf5e0",
+            storageBucket: "drclinic-bf5e0.firebasestorage.app",
+            messagingSenderId: "629899384304",
+            appId: "1:629899384304:web:2be8000b982b0f87087935",
+            databaseURL: "https://drclinic-bf5e0-default-rtdb.firebaseio.com"
+        };
+
+        const firebaseApp = initializeApp(firebaseConfig);
+        const firebaseDb = getDatabase(firebaseApp);
+
+        // State variables
+        let doctorId = "default";
+        let dbPrefix = ""; // Path prefix for database
+        let clinicSettings = {};
+        let bookingSettings = {};
+        let bookedSlots = [];
+        let flatpickrInstance = null;
+
+        // Parse query params to identify the doctor/clinic key
+        const urlParams = new URLSearchParams(window.location.search);
+        doctorId = urlParams.get('doc') || 'default';
+        dbPrefix = doctorId === 'default' ? '' : `clinics/${doctorId}/`;
+
+        // Helpers
+        function getArabicDay(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const dd = new Date(parts[0], parts[1] - 1, parts[2]);
+                const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                return isNaN(dd.getTime()) ? '' : days[dd.getDay()];
+            }
+            return '';
+        }
+
+        // Initialize Booking Page
+        async function initBookingPage() {
+            try {
+                // 1. Fetch clinic details
+                const settingsSnap = await get(ref(firebaseDb, dbPrefix + 'settings'));
+                if (settingsSnap.exists()) {
+                    clinicSettings = settingsSnap.val();
+                } else {
+                    clinicSettings = {
+                        doctorName: 'طبيب العيادة',
+                        specialty: 'عيادة طبية',
+                        clinicName: 'دكتور كلينك'
+                    };
+                }
+
+                // Populate UI titles
+                document.getElementById('displayClinicName').textContent = clinicSettings.clinicName || 'دكتور كلينك';
+                document.getElementById('displayDoctorName').textContent = `${clinicSettings.doctorName || 'طبيب العيادة'} | ${clinicSettings.specialty || 'عيادة طبية'}`;
+                document.title = `حجز موعد أونلاين | عيادة ${clinicSettings.doctorName || 'عبد الرحمن'}`;
+
+                // 2. Fetch booking configurations
+                const bookingSnap = await get(ref(firebaseDb, dbPrefix + 'settings/booking'));
+                if (bookingSnap.exists()) {
+                    bookingSettings = bookingSnap.val();
+                } else {
+                    // Default values if settings do not exist
+                    bookingSettings = {
+                        enabled: true,
+                        note: 'يرجى الحضور قبل الموعد بـ 15 دقيقة للتأكيد.',
+                        days: ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'],
+                        slots: ['05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00']
+                    };
+                }
+
+                // 3. Fetch pricing services and populate booking type select
+                const pricingSnap = await get(ref(firebaseDb, dbPrefix + 'settings/pricingTable'));
+                const typeSelect = document.getElementById('bookingType');
+                if (typeSelect) {
+                    if (pricingSnap.exists()) {
+                        const pricingTable = pricingSnap.val();
+                        const allowed = bookingSettings.allowedServices || [];
+                        typeSelect.innerHTML = Object.entries(pricingTable)
+                            .filter(([service, price]) => allowed.length === 0 || allowed.includes(service))
+                            .map(([service, price]) => `<option value="${service}">${service}</option>`)
+                            .join('');
+                    } else {
+                        typeSelect.innerHTML = `
+                            <option value="كشف عادي">كشف عادي</option>
+                            <option value="كشف مستعجل">كشف مستعجل</option>
+                            <option value="متابعة عادية">متابعة عادية</option>
+                        `;
+                    }
+                }
+
+                // Check if booking is disabled
+                if (!bookingSettings.enabled) {
+                    const disabledNoteEl = document.getElementById('disabledBookingNote');
+                    if (disabledNoteEl) {
+                        disabledNoteEl.textContent = bookingSettings.note || 'نعتذر لك، الحجز عبر الإنترنت غير متاح لهذه العيادة حالياً بقرار من الإدارة. يرجى التواصل هاتفياً.';
+                    }
+                    showView('disabledView');
+                    return;
+                }
+
+                // Show booking note
+                if (bookingSettings.note) {
+                    document.getElementById('displayBookingNote').textContent = bookingSettings.note;
+                    document.getElementById('bookingNoteContainer').style.display = 'block';
+                }
+
+                // Show form view
+                showView('formView');
+
+                // Initialize Calendar Pickr
+                initCalendar();
+
+            } catch (err) {
+                console.error("Initialization error:", err);
+                document.getElementById('loadingView').innerHTML = `
+                    <i class="fas fa-exclamation-triangle text-danger" style="font-size:38px; margin-bottom:15px;"></i>
+                    <p class="text-danger fw-bold">خطأ في الاتصال بقاعدة البيانات. يرجى إعادة تحميل الصفحة.</p>
+                `;
+            }
+        }
+
+        // Toggle Screen Views
+        function showView(viewId) {
+            document.getElementById('loadingView').style.display = 'none';
+            document.getElementById('formView').style.display = 'none';
+            document.getElementById('disabledView').style.display = 'none';
+            document.getElementById('successView').style.display = 'none';
+            document.getElementById(viewId).style.display = 'block';
+        }
+
+        // Setup calendar picker restriction
+        function initCalendar() {
+            // Map day identifiers to Flatpickr day index
+            // flatpickr days: 0 (Sun), 1 (Mon), 2 (Tue), 3 (Wed), 4 (Thu), 5 (Fri), 6 (Sat)
+            const dayMap = {
+                'sun': 0, 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6
+            };
+            const activeDays = (bookingSettings.days || []).map(d => dayMap[d.toLowerCase()]);
+
+            flatpickrInstance = flatpickr("#bookingDate", {
+                locale: "ar",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                disable: [
+                    function(date) {
+                        // disable days that are not checked in activeDays
+                        return !activeDays.includes(date.getDay());
+                    }
+                ],
+                onChange: async function(selectedDates, dateStr) {
+                    if (dateStr) {
+                        await loadAvailableSlots(dateStr);
+                    }
+                }
+            });
+        }
+
+        // Load timeslots for a selected date
+        async function loadAvailableSlots(dateStr) {
+            const selectEl = document.getElementById('bookingSlot');
+            selectEl.disabled = true;
+            selectEl.innerHTML = '<option value="" selected disabled>جاري جلب الساعات المتاحة...</option>';
+
+            try {
+                // Fetch all appointments for the clinic
+                const apptsSnap = await get(ref(firebaseDb, dbPrefix + 'appointments'));
+                const bookedTimes = [];
+
+                if (apptsSnap.exists()) {
+                    const appointments = apptsSnap.val();
+                    Object.values(appointments).forEach(appt => {
+                        // If there is an appointment on the same date, filter it out
+                        if (appt.date === dateStr && appt.status !== 'ملغي') {
+                            if (appt.time) {
+                                bookedTimes.push(appt.time.trim());
+                            }
+                        }
+                    });
+                }
+
+                // Render available slots
+                const allSlots = bookingSettings.slots || [];
+                const availableSlots = allSlots.filter(slot => !bookedTimes.includes(slot.trim()));
+
+                if (availableSlots.length === 0) {
+                    selectEl.innerHTML = '<option value="" selected disabled>عفواً، جميع المواعيد محجوزة اليوم</option>';
+                } else {
+                    selectEl.innerHTML = '<option value="" selected disabled>اختر الساعة...</option>' +
+                        availableSlots.map(slot => `<option value="${slot}">${slot}</option>`).join('');
+                    selectEl.disabled = false;
+                }
+
+            } catch (err) {
+                console.error("Error loading slots:", err);
+                selectEl.innerHTML = '<option value="" selected disabled>خطأ في جلب المواعيد</option>';
+            }
+        }
+
+        // Submit Booking Form
+        window.handleFormSubmit = async function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            const errorEl = document.getElementById('submitError');
+            errorEl.style.display = 'none';
+
+            const name = document.getElementById('patientName').value.trim();
+            const phone = document.getElementById('patientPhone').value.trim();
+            const age = document.getElementById('patientAge').value.trim();
+            const gender = document.getElementById('patientGender').value;
+            const date = document.getElementById('bookingDate').value;
+            const time = document.getElementById('bookingSlot').value;
+            const bookingType = document.getElementById('bookingType').value;
+
+            if (!name || !phone || !age || !gender || !date || !time || !bookingType) {
+                errorEl.textContent = "يرجى تعبئة كافة الحقول بشكل صحيح.";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> جاري تسجيل الحجز...';
+
+            try {
+                // Re-verify slot availability to prevent race conditions
+                const apptsSnap = await get(ref(firebaseDb, dbPrefix + 'appointments'));
+                if (apptsSnap.exists()) {
+                    const isTaken = Object.values(apptsSnap.val()).some(appt => 
+                        appt.date === date && appt.time === time && appt.status !== 'ملغي'
+                    );
+                    if (isTaken) {
+                        errorEl.textContent = "عفواً، تم حجز هذا الوقت للتو من قبل مريض آخر. يرجى اختيار موعد آخر.";
+                        errorEl.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-calendar-check me-1"></i> تأكيد الحجز أونلاين';
+                        // Refresh slots
+                        await loadAvailableSlots(date);
+                        return;
+                    }
+                }
+
+                // 1. Fetch patients to find highest OL- number and check for duplicates
+                const patientsSnap = await get(ref(firebaseDb, dbPrefix + 'patients'));
+                const onlineIds = [];
+                let existingPatientKey = null;
+
+                if (patientsSnap.exists()) {
+                    const patients = patientsSnap.val();
+                    Object.entries(patients).forEach(([key, p]) => {
+                        const idStr = String(p.patientId || '');
+                        if (idStr.indexOf('OL-') === 0) {
+                            const num = parseInt(idStr.replace('OL-', '')) || 0;
+                            onlineIds.push(num);
+                        }
+                        if (p.name === name && p.phone === phone) {
+                            existingPatientKey = key;
+                        }
+                    });
+                }
+
+                let patientKey = existingPatientKey;
+
+                if (!patientKey) {
+                    // Create new patient
+                    const nextNum = onlineIds.length > 0 ? Math.max(...onlineIds) + 1 : 1001;
+                    const finalPatientId = 'OL-' + nextNum;
+
+                    const newPatientRef = push(ref(firebaseDb, dbPrefix + 'patients'));
+                    patientKey = newPatientRef.key;
+
+                    const patientData = {
+                        patientId: finalPatientId,
+                        name: name,
+                        age: age,
+                        gender: gender,
+                        phone: phone,
+                        address: "",
+                        regDate: date,
+                        regDay: getArabicDay(date),
+                        createdAt: Date.now()
+                    };
+                    await set(newPatientRef, patientData);
+                }
+
+                // Save appointment to DB under appointments
+                const newApptRef = push(ref(firebaseDb, dbPrefix + 'appointments'));
+                const notes = `حجز أونلاين | هاتف: ${phone} | سن: ${age} | نوع: ${gender}`;
+                const apptData = {
+                    patientId: patientKey,
+                    patientName: name,
+                    patientPhone: phone,
+                    patientAge: age,
+                    patientGender: gender,
+                    date: date,
+                    time: time,
+                    type: bookingType,
+                    status: "منتظر",
+                    notes: notes,
+                    isFollowUp: bookingType.includes("متابعة"),
+                    isOnlineBooking: true,
+                    createdAt: Date.now()
+                };
+
+                await set(newApptRef, apptData);
+
+                // Show Success Receipt screen
+                document.getElementById('recClinic').textContent = clinicSettings.clinicName || 'دكتور كلينك';
+                document.getElementById('recDoctor').textContent = clinicSettings.doctorName || 'طبيب العيادة';
+                document.getElementById('recPatientName').textContent = name;
+                document.getElementById('recDate').textContent = `${getArabicDay(date)} ${date}`;
+                document.getElementById('recSlot').textContent = time;
+
+                showView('successView');
+
+            } catch (err) {
+                console.error("Booking submission error:", err);
+                errorEl.textContent = "حدث خطأ أثناء حجز الموعد. يرجى المحاولة مرة أخرى.";
+                errorEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-calendar-check me-1"></i> تأكيد الحجز أونلاين';
+            }
+        };
+
+        // Start initialization
+        initBookingPage();
+    </script>
+</body>
+</html>
